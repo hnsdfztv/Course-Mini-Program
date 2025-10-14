@@ -1,5 +1,6 @@
 // pages/quiz/quiz.js
 const app = getApp()
+const { quizQuestions } = require('../../static/data/quiz-questions.js')
 
 Page({
     data: {
@@ -8,8 +9,10 @@ Page({
         currentQuestion: 0,
         score: 0,
         userAnswers: [],
-        timeLeft: 600, // 10分钟
+        timeLeft: 900, // 15分钟（题目增多，时间延长）
         timer: null,
+        totalQuestions: 20, // 每次测验20道题
+        allQuestions: quizQuestions,
         questions: [
             {
                 id: 1,
@@ -103,14 +106,22 @@ Page({
         })
     },
 
+    // 随机抽取题目
+    getRandomQuestions() {
+        const shuffled = [...this.data.allQuestions].sort(() => Math.random() - 0.5)
+        return shuffled.slice(0, this.data.totalQuestions)
+    },
+
     // 开始测验
     startQuiz() {
+        const selectedQuestions = this.getRandomQuestions()
         this.setData({
             quizStarted: true,
+            questions: selectedQuestions,
             currentQuestion: 0,
             score: 0,
             userAnswers: [],
-            timeLeft: 600,
+            timeLeft: 900,
             quizCompleted: false
         })
         this.startTimer()
@@ -167,19 +178,19 @@ Page({
 
         // 计算分数
         let score = 0
+        const scorePerQuestion = 100 / this.data.questions.length
         this.data.questions.forEach((question, index) => {
             if (this.data.userAnswers[index] === question.correctAnswer) {
-                score += 10
+                score += scorePerQuestion
             }
         })
-
-        // 保存测验记录
+        score = Math.round(score)        // 保存测验记录
         const history = wx.getStorageSync('quizHistory') || []
         history.unshift({
             date: new Date().toLocaleString('zh-CN'),
             score: score,
             totalQuestions: this.data.questions.length,
-            timeUsed: 600 - this.data.timeLeft
+            timeUsed: 900 - this.data.timeLeft
         })
         wx.setStorageSync('quizHistory', history.slice(0, 10)) // 只保留最近10次
 

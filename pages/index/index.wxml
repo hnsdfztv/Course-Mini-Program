@@ -14,6 +14,7 @@
       indicator-active-color="#C8232C">
       <swiper-item wx:for="{{bannerList}}" wx:key="id">
         <view class="banner-item">
+          <image class="banner-image" src="{{item.image}}" mode="aspectFill" />
           <view class="banner-overlay"></view>
           <view class="banner-content">
             <view class="banner-title">{{item.title}}</view>

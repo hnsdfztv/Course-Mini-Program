@@ -11,14 +11,21 @@
         <view class="info-icon">📝</view>
         <view class="info-content">
           <view class="info-label">题目数量</view>
-          <view class="info-value">{{questions.length}}题</view>
+          <view class="info-value">{{totalQuestions}}题</view>
+        </view>
+      </view>
+      <view class="info-item">
+        <view class="info-icon">📚</view>
+        <view class="info-content">
+          <view class="info-label">题库总量</view>
+          <view class="info-value">{{allQuestions.length}}题</view>
         </view>
       </view>
       <view class="info-item">
         <view class="info-icon">⏱️</view>
         <view class="info-content">
           <view class="info-label">测验时长</view>
-          <view class="info-value">10分钟</view>
+          <view class="info-value">15分钟</view>
         </view>
       </view>
       <view class="info-item">
@@ -33,8 +40,9 @@
     <view class="quiz-tips">
       <view class="tips-title">📌 测验说明</view>
       <view class="tips-content">
-        <view class="tip-item">• 本测验共{{questions.length}}道题，每题10分</view>
-        <view class="tip-item">• 测验时长10分钟，超时自动提交</view>
+        <view class="tip-item">• 系统将从{{allQuestions.length}}道题中随机抽取{{totalQuestions}}题</view>
+        <view class="tip-item">• 每题5分，满分100分</view>
+        <view class="tip-item">• 测验时长15分钟，超时自动提交</view>
         <view class="tip-item">• 可随时查看答题情况</view>
         <view class="tip-item">• 测验完成后可查看正确答案和解析</view>
       </view>

@@ -1,8 +1,72 @@
 <!--pages/detail/detail.wxml-->
 <view class="container">
-  <view class="coming-soon">
-    <view class="soon-icon">🚧</view>
-    <view class="soon-title">详情页面开发中</view>
-    <view class="soon-desc">敬请期待更多精彩内容</view>
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-icon">⏳</view>
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 详情内容 -->
+  <view wx:if="{{!loading && detailData}}" class="detail-content">
+    <!-- 头部 -->
+    <view class="detail-header">
+      <view class="header-icon">{{detailData.icon}}</view>
+      <view class="header-title">{{detailData.title}}</view>
+      <view class="header-subtitle">{{detailData.subtitle}}</view>
+      
+      <!-- 元信息 -->
+      <view class="header-meta">
+        <text wx:if="{{detailData.date}}" class="meta-item">📅 {{detailData.date}}</text>
+        <text wx:if="{{detailData.year}}" class="meta-item">📅 {{detailData.year}}</text>
+        <text wx:if="{{detailData.value}}" class="meta-value">{{detailData.value}}</text>
+        <text wx:if="{{detailData.source}}" class="meta-item">📰 {{detailData.source}}</text>
+      </view>
+
+      <!-- 标签 -->
+      <view wx:if="{{detailData.tags}}" class="tags-container">
+        <view wx:for="{{detailData.tags}}" wx:key="index" class="tag">
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 主要内容 -->
+    <view class="detail-body">
+      <!-- 新闻类型：content数组 -->
+      <block wx:if="{{type === 'news' && detailData.content}}">
+        <view wx:for="{{detailData.content}}" wx:key="index" class="content-section">
+          <view class="section-subtitle">{{item.subtitle}}</view>
+          <view class="section-text">{{item.text}}</view>
+        </view>
+      </block>
+
+      <!-- 其他类型：sections数组 -->
+      <block wx:if="{{type !== 'news' && detailData.sections}}">
+        <view wx:for="{{detailData.sections}}" wx:key="index" class="content-section">
+          <view class="section-title">{{item.title || item.subtitle}}</view>
+          <view class="section-text">{{item.text || item.content}}</view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="detail-footer">
+      <button class="action-btn secondary" open-type="share">
+        <text class="btn-icon">📤</text>
+        <text class="btn-text">分享内容</text>
+      </button>
+      <button class="action-btn primary" bindtap="backToHome">
+        <text class="btn-icon">🏠</text>
+        <text class="btn-text">返回首页</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view wx:if="{{!loading && !detailData}}" class="error-container">
+    <view class="error-icon">❌</view>
+    <view class="error-title">加载失败</view>
+    <view class="error-desc">未找到相关内容</view>
+    <button class="retry-btn" bindtap="loadDetail">重试</button>
   </view>
 </view>
