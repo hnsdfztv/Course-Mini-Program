@@ -1,0 +1,8 @@
+<!--pages/detail/detail.wxml-->
+<view class="container">
+  <view class="coming-soon">
+    <view class="soon-icon">🚧</view>
+    <view class="soon-title">详情页面开发中</view>
+    <view class="soon-desc">敬请期待更多精彩内容</view>
+  </view>
+</view>

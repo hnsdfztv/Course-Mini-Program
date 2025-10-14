@@ -1,0 +1,188 @@
+<!--pages/quiz/quiz.wxml-->
+<view class="container">
+  <!-- 未开始测验 -->
+  <view class="quiz-intro" wx:if="{{!quizStarted}}">
+    <view class="intro-icon">✍️</view>
+    <view class="intro-title">对外开放知识测验</view>
+    <view class="intro-subtitle">Knowledge Quiz</view>
+    
+    <view class="quiz-info">
+      <view class="info-item">
+        <view class="info-icon">📝</view>
+        <view class="info-content">
+          <view class="info-label">题目数量</view>
+          <view class="info-value">{{questions.length}}题</view>
+        </view>
+      </view>
+      <view class="info-item">
+        <view class="info-icon">⏱️</view>
+        <view class="info-content">
+          <view class="info-label">测验时长</view>
+          <view class="info-value">10分钟</view>
+        </view>
+      </view>
+      <view class="info-item">
+        <view class="info-icon">🎯</view>
+        <view class="info-content">
+          <view class="info-label">及格分数</view>
+          <view class="info-value">60分</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="quiz-tips">
+      <view class="tips-title">📌 测验说明</view>
+      <view class="tips-content">
+        <view class="tip-item">• 本测验共{{questions.length}}道题，每题10分</view>
+        <view class="tip-item">• 测验时长10分钟，超时自动提交</view>
+        <view class="tip-item">• 可随时查看答题情况</view>
+        <view class="tip-item">• 测验完成后可查看正确答案和解析</view>
+      </view>
+    </view>
+
+    <button class="btn-start" bindtap="startQuiz">开始测验</button>
+  </view>
+
+  <!-- 测验进行中 -->
+  <view class="quiz-content" wx:if="{{quizStarted && !quizCompleted}}">
+    <!-- 顶部信息栏 -->
+    <view class="quiz-header">
+      <view class="quiz-progress">
+        <text class="progress-text">{{currentQuestion + 1}}/{{questions.length}}</text>
+      </view>
+      <view class="quiz-timer">
+        <text class="timer-icon">⏱️</text>
+        <text class="timer-text">{{Math.floor(timeLeft / 60)}}:{{timeLeft % 60 < 10 ? '0' : ''}}{{timeLeft % 60}}</text>
+      </view>
+    </view>
+
+    <!-- 进度条 -->
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(currentQuestion + 1) / questions.length * 100}}%"></view>
+    </view>
+
+    <!-- 题目内容 -->
+    <view class="question-card">
+      <view class="question-number">第 {{currentQuestion + 1}} 题</view>
+      <view class="question-text">{{questions[currentQuestion].question}}</view>
+      
+      <view class="options-list">
+        <view 
+          class="option-item {{userAnswers[currentQuestion] === index ? 'selected' : ''}}"
+          wx:for="{{questions[currentQuestion].options}}"
+          wx:key="index"
+          bindtap="selectAnswer"
+          data-answer="{{index}}">
+          <view class="option-label">{{['A', 'B', 'C', 'D'][index]}}</view>
+          <view class="option-text">{{item}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 导航按钮 -->
+    <view class="quiz-navigation">
+      <button 
+        class="nav-btn" 
+        bindtap="prevQuestion"
+        disabled="{{currentQuestion === 0}}">
+        上一题
+      </button>
+      <button 
+        class="nav-btn nav-btn-primary" 
+        bindtap="nextQuestion"
+        wx:if="{{currentQuestion < questions.length - 1}}">
+        下一题
+      </button>
+      <button 
+        class="nav-btn nav-btn-submit" 
+        bindtap="submitQuiz"
+        wx:if="{{currentQuestion === questions.length - 1}}">
+        提交答卷
+      </button>
+    </view>
+
+    <!-- 答题卡 -->
+    <view class="answer-sheet">
+      <view class="sheet-title">答题卡</view>
+      <view class="sheet-grid">
+        <view 
+          class="sheet-item {{userAnswers[index] !== undefined ? 'answered' : ''}} {{currentQuestion === index ? 'current' : ''}}"
+          wx:for="{{questions}}"
+          wx:key="id"
+          bindtap="nextQuestion"
+          data-index="{{index}}">
+          {{index + 1}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 测验完成 -->
+  <view class="quiz-result" wx:if="{{quizCompleted}}">
+    <view class="result-header">
+      <view class="result-icon" wx:if="{{score >= 80}}">🎉</view>
+      <view class="result-icon" wx:if="{{score >= 60 && score < 80}}">👍</view>
+      <view class="result-icon" wx:if="{{score < 60}}">💪</view>
+      
+      <view class="result-title" wx:if="{{score >= 80}}">优秀！</view>
+      <view class="result-title" wx:if="{{score >= 60 && score < 80}}">良好！</view>
+      <view class="result-title" wx:if="{{score < 60}}">继续努力！</view>
+    </view>
+
+    <view class="result-score">
+      <view class="score-label">您的得分</view>
+      <view class="score-value">{{score}}</view>
+      <view class="score-total">/ 100分</view>
+    </view>
+
+    <view class="result-stats">
+      <view class="stat-item">
+        <view class="stat-label">正确题数</view>
+        <view class="stat-value">{{score / 10}}/{{questions.length}}</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-label">用时</view>
+        <view class="stat-value">{{Math.floor((600 - timeLeft) / 60)}}分{{(600 - timeLeft) % 60}}秒</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-label">正确率</view>
+        <view class="stat-value">{{score}}%</view>
+      </view>
+    </view>
+
+    <!-- 答案解析 -->
+    <view class="answer-analysis">
+      <view class="analysis-title">答案解析</view>
+      <view class="analysis-list">
+        <view 
+          class="analysis-item"
+          wx:for="{{questions}}"
+          wx:key="id">
+          <view class="analysis-header">
+            <view class="analysis-number">第{{index + 1}}题</view>
+            <view class="analysis-status {{userAnswers[index] === item.correctAnswer ? 'correct' : 'wrong'}}">
+              {{userAnswers[index] === item.correctAnswer ? '✓ 正确' : '✗ 错误'}}
+            </view>
+          </view>
+          <view class="analysis-question">{{item.question}}</view>
+          <view class="analysis-answer">
+            <text class="answer-label">正确答案：</text>
+            <text class="answer-value">{{['A', 'B', 'C', 'D'][item.correctAnswer]}}</text>
+          </view>
+          <view class="analysis-your-answer" wx:if="{{userAnswers[index] !== item.correctAnswer}}">
+            <text class="answer-label">您的答案：</text>
+            <text class="answer-value wrong">{{userAnswers[index] !== undefined ? ['A', 'B', 'C', 'D'][userAnswers[index]] : '未作答'}}</text>
+          </view>
+          <view class="analysis-explanation">
+            <text class="explanation-label">解析：</text>
+            <text class="explanation-text">{{item.explanation}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="result-actions">
+      <button class="btn-retake" bindtap="retakeQuiz">重新测验</button>
+    </view>
+  </view>
+</view>

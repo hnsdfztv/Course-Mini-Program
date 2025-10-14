@@ -1,0 +1,96 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 轮播图 -->
+  <view class="banner-section">
+    <swiper 
+      class="banner-swiper" 
+      indicator-dots 
+      autoplay 
+      interval="3000" 
+      duration="500"
+      circular
+      bindchange="onBannerChange"
+      indicator-color="rgba(255,255,255,0.5)"
+      indicator-active-color="#C8232C">
+      <swiper-item wx:for="{{bannerList}}" wx:key="id">
+        <view class="banner-item">
+          <view class="banner-overlay"></view>
+          <view class="banner-content">
+            <view class="banner-title">{{item.title}}</view>
+            <view class="banner-subtitle">{{item.subtitle}}</view>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 核心思想理念 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">习近平新时代对外开放思想</view>
+      <view class="section-subtitle">Core Ideas of Opening-up</view>
+    </view>
+    <view class="ideas-grid">
+      <view 
+        class="idea-card" 
+        wx:for="{{coreIdeas}}" 
+        wx:key="id"
+        bindtap="viewIdeaDetail"
+        data-id="{{item.id}}">
+        <view class="idea-icon">{{item.icon}}</view>
+        <view class="idea-title">{{item.title}}</view>
+        <view class="idea-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">学习导航</view>
+      <view class="section-subtitle">Quick Access</view>
+    </view>
+    <view class="quick-links">
+      <view 
+        class="quick-link-item" 
+        wx:for="{{quickLinks}}" 
+        wx:key="id"
+        bindtap="navigateToPage"
+        data-url="{{item.url}}"
+        style="background: linear-gradient(135deg, {{item.color}}dd 0%, {{item.color}} 100%);">
+        <view class="quick-icon">{{item.icon}}</view>
+        <view class="quick-title">{{item.title}}</view>
+        <view class="quick-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最新动态 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">最新动态</view>
+      <view class="section-subtitle">Latest News</view>
+    </view>
+    <view class="news-list">
+      <view 
+        class="news-item" 
+        wx:for="{{latestNews}}" 
+        wx:key="id"
+        bindtap="viewNewsDetail"
+        data-id="{{item.id}}">
+        <view class="news-tag">{{item.tag}}</view>
+        <view class="news-title">{{item.title}}</view>
+        <view class="news-footer">
+          <view class="news-date">{{item.date}}</view>
+          <view class="news-arrow">→</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部说明 -->
+  <view class="footer">
+    <view class="footer-text">学习贯彻习近平新时代中国特色社会主义思想</view>
+    <view class="footer-subtext">推动高质量发展，实现共同繁荣</view>
+  </view>
+</view>

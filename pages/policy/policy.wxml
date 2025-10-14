@@ -1,0 +1,79 @@
+<!--pages/policy/policy.wxml-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <view class="header-title">对外开放政策</view>
+    <view class="header-subtitle">Opening-up Policy</view>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tabs-container">
+    <scroll-view class="tabs-scroll" scroll-x>
+      <view class="tabs">
+        <view 
+          class="tab-item {{activeTab === index ? 'active' : ''}}"
+          wx:for="{{tabs}}"
+          wx:key="index"
+          bindtap="switchTab"
+          data-index="{{index}}">
+          {{item}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 政策列表 -->
+  <view class="policy-list">
+    <view 
+      class="policy-card"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+      bindtap="viewDetail"
+      data-id="{{item.id}}">
+      
+      <view class="policy-header">
+        <view class="policy-category">{{item.category}}</view>
+        <view class="policy-date">{{item.date}}</view>
+      </view>
+
+      <view class="policy-title">{{item.title}}</view>
+      
+      <view class="policy-summary">{{item.summary}}</view>
+
+      <view class="policy-tags">
+        <view class="tag" wx:for="{{item.keyPoints}}" wx:key="index" wx:for-item="point">
+          {{point}}
+        </view>
+      </view>
+
+      <view class="policy-footer">
+        <view class="policy-impact">
+          <text class="impact-icon">💡</text>
+          <text class="impact-text">{{item.impact}}</text>
+        </view>
+        <view class="policy-stats">
+          <text class="read-icon">👁</text>
+          <text class="read-count">{{item.readCount}}</text>
+        </view>
+      </view>
+
+      <view class="policy-action">
+        <text>了解详情 →</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredList.length === 0}}">
+    <view class="empty-icon">📚</view>
+    <view class="empty-text">暂无相关政策内容</view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="page-footer">
+    <view class="footer-tip">
+      <text class="tip-icon">💡</text>
+      <text>学习对外开放政策，深刻理解习近平新时代中国特色社会主义思想</text>
+    </view>
+  </view>
+</view>

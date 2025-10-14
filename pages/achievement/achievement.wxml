@@ -1,0 +1,107 @@
+<!--pages/achievement/achievement.wxml-->
+<view class="container">
+  <!-- 页面头部 -->
+  <view class="page-header">
+    <view class="header-content">
+      <view class="header-icon">🏆</view>
+      <view class="header-title">经济发展成果</view>
+      <view class="header-subtitle">Economic Achievements</view>
+    </view>
+  </view>
+
+  <!-- 分类标签 -->
+  <view class="categories-container">
+    <scroll-view class="categories-scroll" scroll-x>
+      <view class="categories">
+        <view 
+          class="category-item {{activeCategory === index ? 'active' : ''}}"
+          wx:for="{{categories}}"
+          wx:key="index"
+          bindtap="switchCategory"
+          data-index="{{index}}">
+          {{item}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 成果列表 -->
+  <view class="achievements-list">
+    <view 
+      class="achievement-card"
+      wx:for="{{filteredData}}"
+      wx:key="id"
+      bindtap="viewDetail"
+      data-id="{{item.id}}">
+      
+      <!-- 卡片头部 -->
+      <view class="card-header">
+        <view class="header-left">
+          <view class="card-icon">{{item.icon}}</view>
+          <view class="card-title">{{item.title}}</view>
+        </view>
+        <view class="category-tag">{{item.category}}</view>
+      </view>
+
+      <!-- 主要数据 -->
+      <view class="main-data">
+        <view class="data-value">
+          <text class="value-number">{{item.mainData.value}}</text>
+          <text class="value-unit">{{item.mainData.unit}}</text>
+        </view>
+        <view class="data-desc">{{item.mainData.desc}}</view>
+      </view>
+
+      <!-- 关键指标 -->
+      <view class="highlights">
+        <view class="highlight-item" wx:for="{{item.highlights}}" wx:key="label" wx:for-item="highlight">
+          <view class="highlight-label">{{highlight.label}}</view>
+          <view class="highlight-value {{highlight.trend}}">
+            {{highlight.value}}
+            <text class="trend-icon" wx:if="{{highlight.trend === 'up'}}">↑</text>
+            <text class="trend-icon" wx:if="{{highlight.trend === 'down'}}">↓</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 详情说明 -->
+      <view class="card-details">{{item.details}}</view>
+
+      <!-- 查看更多 -->
+      <view class="card-action">
+        <text>查看详细数据 →</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredData.length === 0}}">
+    <view class="empty-icon">📊</view>
+    <view class="empty-text">暂无相关成果数据</view>
+  </view>
+
+  <!-- 底部总结 -->
+  <view class="summary-section">
+    <view class="summary-card">
+      <view class="summary-title">📌 对外开放成就总结</view>
+      <view class="summary-content">
+        <view class="summary-item">
+          <view class="item-icon">✓</view>
+          <view class="item-text">中国已成为全球第一货物贸易大国，第二大服务贸易国</view>
+        </view>
+        <view class="summary-item">
+          <view class="item-icon">✓</view>
+          <view class="item-text">"一带一路"倡议成为全球最大的国际合作平台</view>
+        </view>
+        <view class="summary-item">
+          <view class="item-icon">✓</view>
+          <view class="item-text">自贸试验区、海南自由贸易港建设取得重大进展</view>
+        </view>
+        <view class="summary-item">
+          <view class="item-icon">✓</view>
+          <view class="item-text">外商投资环境持续优化，高质量引进来成效显著</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
