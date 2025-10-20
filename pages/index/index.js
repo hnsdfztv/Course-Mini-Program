@@ -6,20 +6,20 @@ Page({
         bannerList: [
             {
                 id: 1,
-                title: '习近平新时代中国特色社会主义思想',
-                subtitle: '坚持对外开放基本国策',
+                // title: '习近平新时代中国特色社会主义思想',
+                // subtitle: '坚持对外开放基本国策',
                 image: '/static/images/banner1.jpg'
             },
             {
                 id: 2,
-                title: '一带一路倡议',
-                subtitle: '推动构建人类命运共同体',
+                // title: '一带一路倡议',
+                // subtitle: '推动构建人类命运共同体',
                 image: '/static/images/banner2.jpg'
             },
             {
                 id: 3,
-                title: '高水平对外开放',
-                subtitle: '共建开放型世界经济',
+                // title: '高水平对外开放',
+                // subtitle: '共建开放型世界经济',
                 image: '/static/images/banner3.jpg'
             }
         ],
